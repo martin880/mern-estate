@@ -17,7 +17,7 @@ const Header = () => {
           <input
             type="text"
             placeholder="Search..."
-            className="bg-transparent focus:outline-none w-24 sm:w-64"
+            className="bg-transparent focus:outline-none h-4 w-24 sm:w-64"
           />
           <FaSearch className="text-slate-600" />
         </form>
