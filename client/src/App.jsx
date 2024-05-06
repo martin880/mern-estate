@@ -24,5 +24,3 @@ const App = () => {
 };
 
 export default App;
-
-//1 : 05 : 31
