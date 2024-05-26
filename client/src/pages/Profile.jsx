@@ -81,9 +81,6 @@ const Profile = () => {
         dispatch(updateUserFailure(data.message));
         return;
       }
-      dispatch(updateUserSuccess(data));
-      setUpdateSuccess(true);
-    } catch (error) {
       toast({
         title: "User is updated successfully",
         description: updateSuccess,
@@ -91,7 +88,9 @@ const Profile = () => {
         duration: 5000,
         isClosable: true,
       });
-
+      dispatch(updateUserSuccess(data));
+      setUpdateSuccess(true);
+    } catch (error) {
       dispatch(updateUserFailure(error.message));
     }
   };
