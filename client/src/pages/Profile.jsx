@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useSelector, useDispatch } from "react-redux";
 import { useRef, useState, useEffect } from "react";
+import { useToast } from "@chakra-ui/react";
 import {
   getDownloadURL,
   getStorage,
@@ -23,6 +24,7 @@ const Profile = () => {
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const dispatch = useDispatch();
+  const toast = useToast();
 
   useEffect(() => {
     if (file) {
@@ -61,7 +63,7 @@ const Profile = () => {
     e.preventDefault();
     try {
       dispatch(updateUserStart());
-      const res = await fetch(`/api/user/update/ ${currentUser._id}`, {
+      const res = await fetch(`/api/user/update/${currentUser._id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -70,12 +72,26 @@ const Profile = () => {
       });
       const data = await res.json();
       if (data.success === false) {
+        toast({
+          title: error,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
         dispatch(updateUserFailure(data.message));
         return;
       }
       dispatch(updateUserSuccess(data));
       setUpdateSuccess(true);
     } catch (error) {
+      toast({
+        title: "User is updated successfully",
+        description: updateSuccess,
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+
       dispatch(updateUserFailure(error.message));
     }
   };
@@ -149,10 +165,6 @@ const Profile = () => {
           Sign Out
         </span>
       </div>
-      <p className="text-red-600 font-semibold mt-5">{error ? error : ""}</p>
-      <p className="text-green-600 font-semibold mt-5">
-        {updateSuccess ? "User is updated successfully" : ""}
-      </p>
     </div>
   );
 };
