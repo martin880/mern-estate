@@ -8,12 +8,14 @@ import {
   sigInFailure,
 } from "../redux/user/userSlice.js";
 import OAuth from "../components/OAuth.jsx";
+import { useToast } from "@chakra-ui/react";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({});
   const { loading, error } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const toast = useToast();
 
   const handleChange = (e) => {
     setFormData({
@@ -37,9 +39,21 @@ const SignIn = () => {
       const data = await res.json();
       console.log(data);
       if (data.success === false) {
+        toast({
+          title: error,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
         dispatch(sigInFailure(data.message));
         return;
       }
+      toast({
+        title: "Welcome, to the Estate Website",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
       dispatch(signInSuccess(data));
       navigate("/");
     } catch (error) {
@@ -79,7 +93,6 @@ const SignIn = () => {
           <span className="text-blue-700">Sign Up</span>
         </Link>
       </div>
-      {error && <p className="text-red-500 mt-5">{error}</p>}
     </div>
   );
 };
