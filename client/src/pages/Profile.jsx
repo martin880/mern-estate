@@ -1,7 +1,17 @@
 /* eslint-disable no-unused-vars */
 import { useSelector, useDispatch } from "react-redux";
-import { useRef, useState, useEffect } from "react";
-import { useToast } from "@chakra-ui/react";
+import React, { useRef, useState, useEffect } from "react";
+import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Button,
+  useDisclosure,
+  useToast,
+} from "@chakra-ui/react";
 import {
   getDownloadURL,
   getStorage,
@@ -16,6 +26,9 @@ import {
   deleteUserFailure,
   deleteUserStart,
   deleteUserSuccess,
+  signOutUserStart,
+  signOutUserFailure,
+  signOutUserSuccess,
 } from "../redux/user/userSlice";
 
 const Profile = () => {
@@ -28,6 +41,8 @@ const Profile = () => {
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const dispatch = useDispatch();
   const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const cancelRef = React.useRef();
 
   useEffect(() => {
     if (file) {
@@ -75,26 +90,32 @@ const Profile = () => {
       });
       const data = await res.json();
       if (data.success === false) {
+        dispatch(updateUserFailure(data.message));
         toast({
           title: error,
           status: "error",
-          duration: 5000,
+          duration: 3000,
           isClosable: true,
         });
-        dispatch(updateUserFailure(data.message));
         return;
       }
+      dispatch(updateUserSuccess(data));
       toast({
         title: "User is updated successfully",
         description: updateSuccess,
         status: "success",
-        duration: 5000,
+        duration: 3000,
         isClosable: true,
       });
-      dispatch(updateUserSuccess(data));
       setUpdateSuccess(true);
     } catch (error) {
       dispatch(updateUserFailure(error.message));
+      toast({
+        title: error,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 
@@ -106,24 +127,63 @@ const Profile = () => {
       });
       const data = await res.json();
       if (data.success === false) {
+        dispatch(deleteUserFailure(data.message));
         toast({
           title: error,
           status: "error",
-          duration: 5000,
+          duration: 3000,
           isClosable: true,
         });
-        dispatch(deleteUserFailure(data.message));
         return;
       }
+      dispatch(deleteUserSuccess(data));
       toast({
         title: "User is deleted successfully",
         status: "success",
-        duration: 5000,
+        duration: 3000,
         isClosable: true,
       });
-      dispatch(deleteUserSuccess(data));
     } catch (error) {
       dispatch(deleteUserFailure(error.message));
+      toast({
+        title: error,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      dispatch(signOutUserStart());
+      const res = await fetch("/api/auth/signout");
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(signOutUserFailure(data.message));
+        toast({
+          title: error,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+        return;
+      }
+      dispatch(signOutUserSuccess(data));
+      toast({
+        title: "Sign out",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      toast({
+        title: error,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      dispatch(signOutUserFailure(error.message));
     }
   };
 
@@ -190,14 +250,91 @@ const Profile = () => {
       </form>
       <div className="flex justify-between mt-5">
         <span
-          onClick={handleDeleteUser}
+          onClick={onOpen}
           className=" text-red-600  font-semibold cursor-pointer"
         >
           Delete Account
         </span>
-        <span className=" text-red-600 font-semibold cursor-pointer">
+        <AlertDialog
+          isOpen={isOpen}
+          leastDestructiveRef={cancelRef}
+          onClose={onClose}
+        >
+          <AlertDialogOverlay>
+            <AlertDialogContent>
+              <AlertDialogHeader fontSize="md" fontWeight="bold">
+                Delete Account
+              </AlertDialogHeader>
+
+              <AlertDialogBody fontSize={"small"} fontFamily={"sans-serif"}>
+                Are you sure? You cant undo this action afterwards.
+              </AlertDialogBody>
+
+              <AlertDialogFooter>
+                <Button
+                  ref={cancelRef}
+                  onClick={onClose}
+                  fontSize={"small"}
+                  h={7}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  colorScheme="red"
+                  fontSize={"small"}
+                  onClick={handleDeleteUser}
+                  ml={3}
+                  h={7}
+                >
+                  Delete
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialogOverlay>
+        </AlertDialog>
+        <span
+          onClick={onOpen}
+          className=" text-red-600 font-semibold cursor-pointer"
+        >
           Sign Out
         </span>
+        <AlertDialog
+          isOpen={isOpen}
+          leastDestructiveRef={cancelRef}
+          onClose={onClose}
+        >
+          <AlertDialogOverlay>
+            <AlertDialogContent>
+              <AlertDialogHeader fontSize="md" fontWeight="bold">
+                Sign out
+              </AlertDialogHeader>
+
+              <AlertDialogBody fontSize={"small"} fontFamily={"sans-serif"}>
+                Are you sure want to sign out ?.
+              </AlertDialogBody>
+
+              <AlertDialogFooter>
+                <Button
+                  ref={cancelRef}
+                  onClick={onClose}
+                  fontSize={"small"}
+                  h={7}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  colorScheme="red"
+                  fontSize={"small"}
+                  onClick={handleSignOut}
+                  ml={3}
+                  h={7}
+                >
+                  Sign out
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialogOverlay>
+        </AlertDialog>
       </div>
     </div>
   );
