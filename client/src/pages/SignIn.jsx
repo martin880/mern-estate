@@ -27,7 +27,7 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      dispatch(signInStart);
+      dispatch(signInStart());
       const res = await fetch("/api/auth/signin", {
         method: "POST",
         headers: {
@@ -39,25 +39,31 @@ const SignIn = () => {
       const data = await res.json();
       console.log(data);
       if (data.success === false) {
+        dispatch(sigInFailure(data.message));
         toast({
           title: error,
           status: "error",
-          duration: 5000,
+          duration: 3000,
           isClosable: true,
         });
-        dispatch(sigInFailure(data.message));
         return;
       }
+      dispatch(signInSuccess(data));
       toast({
         title: "Welcome, to the Estate Website",
         status: "success",
-        duration: 5000,
+        duration: 3000,
         isClosable: true,
       });
-      dispatch(signInSuccess(data));
       navigate("/");
     } catch (error) {
       dispatch(sigInFailure(error.message));
+      toast({
+        title: error,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 

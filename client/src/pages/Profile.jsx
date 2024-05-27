@@ -293,48 +293,11 @@ const Profile = () => {
           </AlertDialogOverlay>
         </AlertDialog>
         <span
-          onClick={onOpen}
+          onClick={handleSignOut}
           className=" text-red-600 font-semibold cursor-pointer"
         >
           Sign Out
         </span>
-        <AlertDialog
-          isOpen={isOpen}
-          leastDestructiveRef={cancelRef}
-          onClose={onClose}
-        >
-          <AlertDialogOverlay>
-            <AlertDialogContent>
-              <AlertDialogHeader fontSize="md" fontWeight="bold">
-                Sign out
-              </AlertDialogHeader>
-
-              <AlertDialogBody fontSize={"small"} fontFamily={"sans-serif"}>
-                Are you sure want to sign out ?.
-              </AlertDialogBody>
-
-              <AlertDialogFooter>
-                <Button
-                  ref={cancelRef}
-                  onClick={onClose}
-                  fontSize={"small"}
-                  h={7}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  colorScheme="red"
-                  fontSize={"small"}
-                  onClick={handleSignOut}
-                  ml={3}
-                  h={7}
-                >
-                  Sign out
-                </Button>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialogOverlay>
-        </AlertDialog>
       </div>
     </div>
   );
