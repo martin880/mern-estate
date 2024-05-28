@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useSelector, useDispatch } from "react-redux";
 import React, { useRef, useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -247,6 +248,12 @@ const Profile = () => {
         >
           {loading ? "Loading..." : "Update"}
         </button>
+        <Link
+          className="bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95"
+          to={"/create-listing"}
+        >
+          Create Listing
+        </Link>
       </form>
       <div className="flex justify-between mt-5">
         <span
