@@ -38,6 +38,7 @@ const Profile = () => {
   const [file, setFile] = useState(undefined);
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
+  const [showListingsError, setShowListingsError] = useState(false);
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const dispatch = useDispatch();
@@ -188,6 +189,26 @@ const Profile = () => {
     }
   };
 
+  const handleShowListings = async () => {
+    try {
+      setShowListingsError(false);
+      const res = await fetch(`/api/user/listings/${currentUser._id}`);
+      const data = await res.json();
+      if (data.success === false) {
+        setShowListingsError(true);
+        return;
+      }
+    } catch (error) {
+      toast({
+        title: error,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      dispatch(setShowListingsError(true));
+    }
+  };
+
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
@@ -306,6 +327,9 @@ const Profile = () => {
           Sign Out
         </span>
       </div>
+      <button onClick={handleShowListings} className="text-green-700 w-full">
+        Show Listings
+      </button>
     </div>
   );
 };
