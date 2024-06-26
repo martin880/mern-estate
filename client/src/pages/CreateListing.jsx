@@ -161,9 +161,21 @@ const CreateListing = () => {
       if (data.success === false) {
         setError(data.message);
       }
+      toast({
+        title: "Created listings successfully",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
       navigate(`/listing/${data._id}`);
     } catch (error) {
       setError(error.message);
+      toast({
+        title: error,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
       setLoading(false);
     }
   };
