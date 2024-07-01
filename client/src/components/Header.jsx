@@ -35,9 +35,11 @@ const Header = () => {
             <span className="text-slate-700">Estate</span>
           </h1>
         </Link>
+
+        {/* Search Form */}
         <form
           onSubmit={handleSubmit}
-          className="bg-slate-100 p-3 rounded-lg flex items-center"
+          className="bg-slate-100 p-3 rounded-lg flex items-center mt-3 sm:mt-0 sm:ml-4 sm:w-auto"
         >
           <input
             type="text"
@@ -50,30 +52,28 @@ const Header = () => {
             <FaSearch className="text-slate-600" />
           </button>
         </form>
-        <ul className="flex gap-4">
-          <Link to="/">
-            <li className="hidden sm:inline font-semibold text-slate-700 hover:underline cursor-pointer">
-              Home
-            </li>
-          </Link>
-          <Link to="/about">
-            <li className="hidden sm:inline font-semibold  text-slate-700 hover:underline cursor-pointer">
-              About
-            </li>
-          </Link>
-          <Link to="/profile">
-            {currentUser ? (
-              <img
-                className="rounded-full h-7 w-7 object-cover"
-                src={currentUser.avatar}
-                alt="profile"
-              />
-            ) : (
-              <li className="text-slate-700 font-semibold hover:underline cursor-pointer">
-                Sign In
-              </li>
-            )}
-          </Link>
+
+        {/* Navigation Links */}
+        <ul className="flex gap-4 mt-3 sm:mt-0">
+          <li className="font-semibold text-slate-700 hover:underline cursor-pointer">
+            <Link to="/">Home</Link>
+          </li>
+          <li className="font-semibold text-slate-700 hover:underline cursor-pointer">
+            <Link to="/about">About</Link>
+          </li>
+          <li className="font-semibold text-slate-700 hover:underline cursor-pointer">
+            <Link to="/profile">
+              {currentUser ? (
+                <img
+                  className="rounded-full h-7 w-7 object-cover"
+                  src={currentUser.avatar}
+                  alt="profile"
+                />
+              ) : (
+                "Sign In"
+              )}
+            </Link>
+          </li>
         </ul>
       </div>
     </header>
