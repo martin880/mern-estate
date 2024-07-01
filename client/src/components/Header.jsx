@@ -54,7 +54,7 @@ const Header = () => {
         </form>
 
         {/* Navigation Links */}
-        <ul className="flex gap-4 mt-3 sm:mt-0">
+        <ul className="flex gap-4 mt-3 sm:mt-0 mx-2 flex-row">
           <li className="font-semibold text-slate-700 hover:underline cursor-pointer">
             <Link to="/">Home</Link>
           </li>
@@ -70,7 +70,7 @@ const Header = () => {
                   alt="profile"
                 />
               ) : (
-                "Sign In"
+                "Login"
               )}
             </Link>
           </li>
