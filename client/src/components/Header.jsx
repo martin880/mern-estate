@@ -70,7 +70,9 @@ const Header = () => {
                   alt="profile"
                 />
               ) : (
-                "Login"
+                <button className="bg-slate-700 hover:bg-slate-600 text-white font-semibold px-4 rounded h-7">
+                  Login
+                </button>
               )}
             </Link>
           </li>
